@@ -3,8 +3,12 @@ package cybersoft.javabackend.girajava14bqn.role.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -19,8 +23,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "gira_role")
-public class Role extends BaseEntity {
+@Table(name = "gira_group_role")
+public class GroupRole extends BaseEntity {
 	
 	@Column(name = "name", unique = true)
 	private String name;
@@ -31,7 +35,11 @@ public class Role extends BaseEntity {
 	@Column(name = "code", nullable = true)
 	private String code;
 	
-	@ManyToMany(mappedBy = "roles")
-	private Set<GroupRole> groups = new LinkedHashSet<GroupRole>();
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "gira_role_group_role",
+			joinColumns = @JoinColumn(name = "group_role_id"),
+			inverseJoinColumns = @JoinColumn( name = "role_id")
+			)
+	private Set<Role> roles = new LinkedHashSet<Role>();
 }
 
