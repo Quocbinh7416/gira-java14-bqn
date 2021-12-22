@@ -2,11 +2,17 @@ package cybersoft.javabackend.girajava14bqn.role.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import javax.validation.Valid;
 
-import cybersoft.javabackend.girajava14bqn.role.model.Role;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import cybersoft.javabackend.girajava14bqn.role.dto.RoleDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,5 +26,17 @@ public interface RoleController {
 			@ApiResponse(responseCode = "403", description = "do not have correct authorization")
 	})
 	@GetMapping(value = "/roles", produces = "application/json")
-	public ResponseEntity<List<Role>> getRole();
+	public ResponseEntity<List<RoleDTO>> getRole();
+	
+	@Operation(method = "post", description = "create new role")
+	@ApiResponses({
+		@ApiResponse(responseCode = "400", description = "invalid role"),
+		@ApiResponse(responseCode = "204", description = "created")
+	})
+	@PostMapping(value="/roles")
+	public ResponseEntity<Object> createRole(
+			@Parameter(description = "role dto") @Valid @RequestBody RoleDTO dto,
+				BindingResult bindingResult
+				);
+	
 }
