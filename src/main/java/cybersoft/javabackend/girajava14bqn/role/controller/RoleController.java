@@ -26,7 +26,7 @@ public interface RoleController {
 			@ApiResponse(responseCode = "403", description = "do not have correct authorization")
 	})
 	@GetMapping(value = "/roles", produces = "application/json")
-	public ResponseEntity<List<RoleDTO>> getRole();
+	public ResponseEntity<Object> getRole();
 	
 	@Operation(method = "post", description = "create new role")
 	@ApiResponses({
