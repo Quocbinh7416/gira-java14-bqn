@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/gira
     username: postgres
-    password: admin
+    password: 1234
     
   jpa:
     show-sql: true
