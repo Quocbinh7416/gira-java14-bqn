@@ -12,6 +12,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import cybersoft.javabackend.girajava14bqn.security.jwt.JWTAuthenficationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private JWTAuthenficationFilter filter;
 	
 	@Bean
 	public PasswordEncoder getPasswordEncode() {
@@ -48,6 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		// disable csrf
 		http.csrf().disable();
+		
+		// add jwt filter
+		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 		
 		// cấu hình xác thực cho các api
 		http.antMatcher("/**").authorizeRequests()

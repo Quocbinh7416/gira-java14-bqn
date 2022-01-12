@@ -2,6 +2,8 @@ package cybersoft.javabackend.girajava14bqn.security.jwt;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +28,10 @@ public class JwtUtils {
 	private String secret;
 	
 	public String generateJwtToken(Authentication authentication) {
+		if (authentication == null) {
+			return null;
+		}
+		
 		UserDetails userInfo = (UserDetails) authentication.getPrincipal();
 		Date now = new Date();
 		
@@ -65,5 +71,23 @@ public class JwtUtils {
 		}
 		
 		return false;
+	}
+	
+	public String getJwtTokenFromRequest(HttpServletRequest request ) {
+		String bearer = request.getHeader("Authorization");
+		
+		if (bearer == null) {
+			return null;
+		}
+		
+		return bearer.substring("Bearer ".length()).trim();
+	}
+
+	public String getUsernameFromToken(String token) {
+		
+		return Jwts.parser().setSigningKey(secret)
+				.parseClaimsJwt(token)
+				.getBody()
+				.getSubject();
 	}
 }
